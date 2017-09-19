@@ -1,9 +1,13 @@
 {
   "name": "git-manage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A tool to manage syncing of all local git reposetories to their remotes",
   "main": "index.js",
+  "bin": {
+    "git-manage": "./index.js"
+  },
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,5 +18,9 @@
     "git"
   ],
   "author": "Eli Smith",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.11.0",
+    "node-persist": "^2.1.0"
+  }
 }
