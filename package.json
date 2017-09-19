@@ -1,0 +1,18 @@
+{
+  "name": "git-manage",
+  "version": "0.0.1",
+  "description": "A tool to manage syncing of all local git reposetories to their remotes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/plunkinguitar/git-manage"
+  },
+  "keywords": [
+    "git"
+  ],
+  "author": "Eli Smith",
+  "license": "MIT"
+}
