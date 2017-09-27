@@ -1,6 +1,6 @@
 {
   "name": "git-manage",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "A tool to manage syncing of all local git reposetories to their remotes",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/plunkinguitar/git-manage"
+    "url": "https://github.com/plunkinguitar/git-manage"
   },
   "keywords": [
     "git"
@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.11.0",
-    "node-persist": "^2.1.0"
+    "node-persist": "^2.1.0",
+    "nodegit": "^0.20.2"
   }
 }
