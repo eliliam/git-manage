@@ -1,4 +1,5 @@
 # git-manage
+![passing build](https://img.shields.io/badge/build-passing-green.svg)
 A cli tool to manage syncing of all local git repositories to their
 remotes
 
