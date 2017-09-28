@@ -102,6 +102,7 @@ storage.init({dir: homePath}).then(()=>{
             let toLog = "";
             let mergeFlag = false;
             let simplegit = require("simple-git")(gits[git])
+                .silent(true)
                 .raw([
                     "rev-parse",
                     "--show-toplevel"
@@ -130,14 +131,15 @@ storage.init({dir: homePath}).then(()=>{
                     }
                 })
                 .raw([
-                    "diff",
-                    "--name-only",
-                    "master",
-                    "origin/master"
+                    "rev-list",
+                    "--left-right",
+                    "--count",
+                    "origin/master",
+                    "master"
                 ], (err,res)=>{
-                    if (!err && typeof res === "string"){
-                        results = res.trim().split("\n");
-                        if (results){
+                    let diffs = res.split("\t");
+                    if (!err) {
+                        if (diffs[0] !== "0" && diffs[1] !== "0"){
                             toLog += "Merge needed".red;
                             mergeFlag = true;
                         }
