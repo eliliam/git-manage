@@ -3,7 +3,6 @@ module.exports = (repoPath) => {
     let toLog = "";
     let mergeFlag = false;
     let simplegit = require("simple-git")(repoPath)
-        .silent(true)
         .raw([
             "rev-parse",
             "--show-toplevel"

@@ -7,6 +7,7 @@ const path = require("path");
 const fs = require("fs");
 const colors = require('colors');
 const sync = require('./sync');
+const validate = require('./validate');
 
 program
     .version("0.0.1")
@@ -58,15 +59,19 @@ storage.init({dir: homePath}).then(()=>{
         for (key in gits) {
             let repoName = key;
             let repoPath = gits[key];
-            let spaceCounter = 30;
-            let spaces = "";
-            for (c in repoName){
-                spaceCounter--;
+            let valid = fs.existsSync(repoPath + "/.git");
+            if (valid) {
+                let spaceCounter = 30 - repoName.length;
+                let spaces = "";
+                for (let i=0;i<spaceCounter;i++){
+                    spaces += " ";
+                }
+                console.log(key+spaces+repoPath);
+            } else {
+                console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
+                delete gits[repoName]
             }
-            for (let i=0;i<spaceCounter;i++){
-                spaces += " ";
-            }
-            console.log(key+spaces+repoPath);
+            storage.setItemSync("allRepos", gits);
         }
     }
 
@@ -77,9 +82,8 @@ storage.init({dir: homePath}).then(()=>{
         let rmName = rmPath.split("/").slice(-1)[0];
         if (Object.keys(gits).indexOf(rmName)===-1) {
             console.log("Repo not found in list");
-            return
+            return;
         }
-
         delete gits[rmName];
 
         storage.setItem("allRepos", gits);
@@ -97,13 +101,27 @@ storage.init({dir: homePath}).then(()=>{
         let gits = storage.getItemSync("allRepos", {});
 
         for (git in gits){
-            sync(gits[git]);
+            let valid = fs.existsSync(gits[git] + "/.git");
+            if (valid){
+                sync(gits[git]);
+            } else {
+                console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
+                delete gits[repoName];
+            }
         }
+        storage.setItemSync("allRepos", gits);
 
     }
     if (program.syncOne){
         let gits = storage.getItemSync("allRepos", {});
-        sync(gits[program.syncOne]);
+        let valid = fs.existsSync(gits[git] + "/.git");
+        if (valid){
+            sync(gits[program.syncOne]);
+        } else {
+            console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
+            delete gits[repoName];
+        }
+        storage.setItemSync("allRepos", gits);
     }
 }, (err)=>{
     console.log(err);
