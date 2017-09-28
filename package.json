@@ -20,8 +20,10 @@
   "author": "Eli Smith",
   "license": "MIT",
   "dependencies": {
+    "colors": "^1.1.2",
     "commander": "^2.11.0",
     "node-persist": "^2.1.0",
-    "nodegit": "^0.20.2"
+    "simple-git": "^1.77.0",
+    "username": "^3.0.0"
   }
 }
