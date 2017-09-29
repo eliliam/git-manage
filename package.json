@@ -1,6 +1,6 @@
 {
   "name": "git-manage",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "A tool to manage syncing of all local git reposetories to their remotes",
   "main": "index.js",
   "bin": {
