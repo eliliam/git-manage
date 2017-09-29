@@ -1,3 +1,10 @@
 language: node_js
+sudo: false
 node_js:
-  -"stable"
+  - "6"
+before_script:
+  - npm install
+install:
+  - npm install
+script:
+  - node src/index.js
