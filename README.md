@@ -14,7 +14,7 @@ None other than those specified in package.json
 > Currently only the master branch is synced
 
 |Command     |Definition   |
-|------------|:-----------:|
+|------------|-----------|
 |`git-manage`|Displays help page|
 |`git-manage -a [repo]`|Adds specified repo to managed list|
 |`git-manage -r [repo]`|Removes specified repo from managed list|
