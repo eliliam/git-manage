@@ -1,5 +1,5 @@
 # git-manage
-![passing build](https://img.shields.io/badge/build-passing-green.svg)
+[![Build Status](https://travis-ci.org/plunkinguitar/git-manage.svg?branch=master)](https://travis-ci.org/plunkinguitar/git-manage)
 A cli tool to manage syncing of all local git repositories to their
 remotes
 
