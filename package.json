@@ -1,6 +1,6 @@
 {
   "name": "git-manage",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tool to manage syncing of all local git reposetories to their remotes",
   "main": "index.js",
   "bin": {
@@ -15,7 +15,11 @@
     "url": "https://github.com/plunkinguitar/git-manage"
   },
   "keywords": [
-    "git"
+    "git",
+    "manage",
+    "source control",
+    "vcs",
+    "repositories"
   ],
   "author": "Eli Smith",
   "license": "MIT",
