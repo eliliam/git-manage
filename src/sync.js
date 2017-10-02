@@ -1,4 +1,4 @@
-module.exports = (repoPath) => {
+module.exports = (repoPath, branch) => {
     let remoteHead, curHead, leadingHead;
     let toLog = "";
     let mergeFlag = false;
@@ -8,13 +8,13 @@ module.exports = (repoPath) => {
             "--show-toplevel"
         ], (err, res) =>{
             if (!err){
-                toLog += res.trim().split("/").slice(-1)[0]+": ";
+                toLog += res.trim().split("/").slice(-1)[0]+" / "+branch+": ";
             }
         })
         .raw(["fetch"])
         .raw([
             "rev-parse",
-            "origin/master"
+            "origin/"+branch
         ], (err, res)=>{
             if (!err){
                 remoteHead = res.trim();
@@ -24,7 +24,7 @@ module.exports = (repoPath) => {
         })
         .raw([
             "rev-parse",
-            "master"
+            branch
         ], (err, res)=>{
             if (!err){
                 curHead = res.trim();
@@ -34,8 +34,8 @@ module.exports = (repoPath) => {
             "rev-list",
             "--left-right",
             "--count",
-            "origin/master",
-            "master"
+            "origin/"+branch,
+            branch
         ], (err,res)=>{
             let diffs = res.split("\t");
             if (!err) {
@@ -47,8 +47,8 @@ module.exports = (repoPath) => {
         })
         .raw([
             "merge-base",
-            "master",
-            "origin/master"
+            branch,
+            "origin/"+branch
         ], (err, res)=>{
             if (!err && !mergeFlag){
                 leadingHead = res.trim();
@@ -57,11 +57,11 @@ module.exports = (repoPath) => {
                 } else if (leadingHead === remoteHead) {
                     toLog+= "Push needed".blue;
                     toLog+="\nPushing now...".blue;
-                    simplegit.push("origin", "master");
+                    simplegit.push("origin", branch);
                 } else if (leadingHead === curHead){
                     toLog+="Pull needed".blue;
                     toLog+="\nPulling now...".blue;
-                    simplegit.pull("origin", "master")
+                    simplegit.pull("origin", branch)
                 } else if (leadingHead !== curHead && curHead !== remoteHead) {
                     toLog+="Merge needed".red;
                 }

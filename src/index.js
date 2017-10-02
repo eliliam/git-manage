@@ -18,6 +18,9 @@ program
     .option("    --remove-all", "Remove all repos from managed list")
     .option("-s, --sync", "Syncs all added repos to remote")
     .option("    --sync-one [repo]", "Syncs specific repo to remote")
+    .option("--select [repo]", "Used to specify branch for further action")
+    .option("-b, --branch [branch]", "Add branch to add to managed list, requires --select")
+    .option("    --remove-branch", "Removes branch from managed list, requires --select")
     .parse(process.argv);
 
 if (process.argv.length===2) program.outputHelp();
@@ -37,13 +40,14 @@ storage.init({dir: homePath}).then(()=>{
         if (!allRepos){
             allRepos = {}
         }
-
-        if (Object.keys(allRepos).indexOf(addName) !== -1) {
-            console.log("Repo already added");
-            return
+        for (repo in Object.keys(allRepos)){
+            if (repo[0] === addName) {
+                console.log("Repo already added");
+                return
+            }
         }
 
-        allRepos[addName] = addPath;
+        allRepos[addName] = [addPath, ["master"]];
         storage.setItem("allRepos", allRepos);
         console.log("Added " + addName);
     }
@@ -101,9 +105,11 @@ storage.init({dir: homePath}).then(()=>{
         let gits = storage.getItemSync("allRepos", {});
 
         for (git in gits){
-            let valid = fs.existsSync(gits[git] + "/.git");
+            let valid = fs.existsSync(gits[git][0] + "/.git");
             if (valid){
-                sync(gits[git]);
+                for (i in gits[git][1]){
+                    sync(gits[git][0], gits[git][1][i]);
+                }
             } else {
                 console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
                 delete gits[repoName];
@@ -116,12 +122,48 @@ storage.init({dir: homePath}).then(()=>{
         let gits = storage.getItemSync("allRepos", {});
         let valid = fs.existsSync(gits[git] + "/.git");
         if (valid){
-            sync(gits[program.syncOne]);
+            sync(gits[program.syncOne], "master");
         } else {
             console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
             delete gits[repoName];
         }
         storage.setItemSync("allRepos", gits);
+    }
+    if (typeof program.select === "string" && typeof program.branch === "string"){
+        let gits = storage.getItemSync("allRepos", {});
+        if (Object.keys(gits).indexOf(program.select) === -1){
+            console.log("Repo does not exist");
+            return
+        }
+        let simplegit = require('simple-git')(gits[program.select][0])
+            .raw([
+                "remote",
+                "update"
+            ])
+            .raw([
+                "branch"
+            ], (err, branches)=>{
+                if (!err){
+                    branchList = branches.trim().split('\n');
+                    for (branch in branchList){
+                        branchList[branch] = branchList[branch].trim().split(' ');
+                        branchList[branch] = branchList[branch][branchList[branch].length-1];
+                    }
+                    if (branchList.indexOf(program.branch) === -1){
+                        console.log("Branch not found");
+                    } else {
+                        if (gits[program.select][1].indexOf(program.select) === -1){
+                            gits[program.select][1].push(program.branch);
+                            storage.setItemSync("allRepos", gits);
+                            console.log("Added " + program.branch + " to " + program.select);
+                        } else {
+                            console.log("Already added to " + program.select);
+                        }
+                    }
+                } else {
+                    console.log("Err: " + err)
+                }
+            });
     }
 }, (err)=>{
     console.log(err);
