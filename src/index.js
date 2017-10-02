@@ -20,7 +20,7 @@ program
     .option("    --sync-one [repo]", "Syncs specific repo to remote")
     .option("--select [repo]", "Used to specify branch for further action")
     .option("-b, --branch [branch]", "Add branch to add to managed list, requires --select")
-    .option("    --remove-branch", "Removes branch from managed list, requires --select")
+    .option("    --remove-branch [branch]", "Removes branch from managed list, requires --select")
     .parse(process.argv);
 
 if (process.argv.length===2) program.outputHelp();
@@ -164,6 +164,21 @@ storage.init({dir: homePath}).then(()=>{
                     console.log("Err: " + err)
                 }
             });
+    }
+    if (typeof program.select === "string" && typeof program.removeBranch === "string"){
+        let gits = storage.getItemSync("allRepos", {});
+        if (Object.keys(gits).indexOf(program.select) === -1){
+            console.log("Repo does not exist");
+            return
+        }
+        let index = gits[program.select][1].indexOf(program.removeBranch);
+        if (index === -1){
+            console.log("Branch not managed");
+        } else {
+            gits[program.select][1].splice(index, 1);
+            storage.setItemSync("allRepos", gits);
+            console.log("Removed " + program.removeBranch + " from " + program.select);
+        }
     }
 }, (err)=>{
     console.log(err);

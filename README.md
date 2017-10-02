@@ -9,15 +9,16 @@ remotes
 # Usage
 |Command     |Definition   |
 |------------|-----------|
-|`git-manage`|Displays help page|
-|`git-manage -a [repo]`|Adds specified repo to managed list|
-|`git-manage -r [repo]`|Removes specified repo from managed list|
-|`git-manage --remove-all`|Removes all repos from manages list|
-|`git-manage -l`|Lists all repos in watched list and their path|
-|`git-manage -s`|Syncs all repos in watched list to their remotes|
-|`git-manage --sync-one [repo]`|Syncs specified repo with its remote|
-|`git-manage --select [repo] -b [branch]`|Adds branch of specified repo to managed list|
-
+|`-h`|Displays help page|
+|`-a [repo]`|Adds specified repo to managed list|
+|`-r [repo]`|Removes specified repo from managed list|
+|`--remove-all`|Removes all repos from manages list|
+|`-l`|Lists all repos in watched list and their path|
+|`-s`|Syncs all repos in watched list to their remotes|
+|`--sync-one [repo]`|Syncs specified repo with its remote|
+|`--select [repo]`|Selects repo for further modification, used with `--branch` and `--remove-branch`|
+|`-b [repo]`|Adds specified branch to repo managed list, must be used with `--select`
+|`--remove-branch [branch]`|Removes specified branch from repo managed list, must be used with `--select`|
 ### Sync
 
 > By default, only the master branch is synced, you can add more with `--branch`
