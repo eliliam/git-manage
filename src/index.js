@@ -31,6 +31,7 @@ storage.init({dir: homePath}).then(()=>{
     if (program.add) {
         let addPath = path.resolve(program.add);
         let addName = addPath.split("/").slice(-1)[0];
+        console.log(addPath)
         if (!fs.existsSync(addPath+"/.git")) {
             console.log("Directory not a git");
             return
@@ -62,7 +63,7 @@ storage.init({dir: homePath}).then(()=>{
         console.log("Added gits:");
         for (key in gits) {
             let repoName = key;
-            let repoPath = gits[key];
+            let repoPath = gits[key][0];
             let valid = fs.existsSync(repoPath + "/.git");
             if (valid) {
                 let spaceCounter = 30 - repoName.length;
