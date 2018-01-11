@@ -1,5 +1,5 @@
 # git-manage
-[![Build Status](https://travis-ci.org/plunkinguitar/git-manage.svg?branch=master)](https://travis-ci.org/plunkinguitar/git-manage)
+[![Build Status](https://travis-ci.org/eliliam/git-manage.svg?branch=master)](https://travis-ci.org/eliliam/git-manage)
 A cli tool to manage syncing of all local git repositories to their
 remotes
 
