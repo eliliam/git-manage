@@ -23,25 +23,25 @@ program
     .option("    --remove-branch [branch]", "Removes branch from managed list, requires --select")
     .parse(process.argv);
 
-if (process.argv.length===2) program.outputHelp();
+if (process.argv.length === 2) program.outputHelp();
 
 const homePath = "/home/" + username.sync() + "/.node-persist/";
 
-storage.init({dir: homePath}).then(()=>{
+storage.init({dir: homePath}).then(() => {
     if (program.add) {
         let addPath = path.resolve(program.add);
         let addName = addPath.split("/").slice(-1)[0];
-        console.log(addPath)
-        if (!fs.existsSync(addPath+"/.git")) {
+        console.log(addPath);
+        if (!fs.existsSync(addPath + "/.git")) {
             console.log("Directory not a git");
             return
         }
         let allRepos = storage.getItemSync("allRepos");
 
-        if (!allRepos){
+        if (!allRepos) {
             allRepos = {}
         }
-        for (repo in Object.keys(allRepos)){
+        for (repo in Object.keys(allRepos)) {
             if (repo[0] === addName) {
                 console.log("Repo already added");
                 return
@@ -55,7 +55,7 @@ storage.init({dir: homePath}).then(()=>{
 
     if (program.list) {
         let gits = storage.getItemSync("allRepos") || [];
-        if (!Object.keys(gits).length){
+        if (!Object.keys(gits).length) {
             console.log("There are no gits added");
             console.log("You can add one with git-manage --add git-repo-name");
             return
@@ -68,10 +68,10 @@ storage.init({dir: homePath}).then(()=>{
             if (valid) {
                 let spaceCounter = 30 - repoName.length;
                 let spaces = "";
-                for (let i=0;i<spaceCounter;i++){
+                for (let i = 0; i < spaceCounter; i++) {
                     spaces += " ";
                 }
-                console.log(key+spaces+repoPath);
+                console.log(key + spaces + repoPath);
             } else {
                 console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
                 delete gits[repoName]
@@ -85,7 +85,7 @@ storage.init({dir: homePath}).then(()=>{
         let index = -1;
         let rmPath = path.resolve(program.remove);
         let rmName = rmPath.split("/").slice(-1)[0];
-        if (Object.keys(gits).indexOf(rmName)===-1) {
+        if (Object.keys(gits).indexOf(rmName) === -1) {
             console.log("Repo not found in list");
             return;
         }
@@ -96,19 +96,19 @@ storage.init({dir: homePath}).then(()=>{
 
     }
 
-    if (program.removeAll){
+    if (program.removeAll) {
         storage.setItemSync("allRepos", {});
         console.log("Removed all repos from manage list");
     }
 
-    if (program.sync){
+    if (program.sync) {
 
         let gits = storage.getItemSync("allRepos", {});
 
-        for (git in gits){
+        for (git in gits) {
             let valid = fs.existsSync(gits[git][0] + "/.git");
-            if (valid){
-                for (i in gits[git][1]){
+            if (valid) {
+                for (i in gits[git][1]) {
                     sync(gits[git][0], gits[git][1][i]);
                 }
             } else {
@@ -119,10 +119,10 @@ storage.init({dir: homePath}).then(()=>{
         storage.setItemSync("allRepos", gits);
 
     }
-    if (program.syncOne){
+    if (program.syncOne) {
         let gits = storage.getItemSync("allRepos", {});
         let valid = fs.existsSync(gits[git] + "/.git");
-        if (valid){
+        if (valid) {
             sync(gits[program.syncOne], "master");
         } else {
             console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
@@ -130,9 +130,9 @@ storage.init({dir: homePath}).then(()=>{
         }
         storage.setItemSync("allRepos", gits);
     }
-    if (typeof program.select === "string" && typeof program.branch === "string"){
+    if (typeof program.select === "string" && typeof program.branch === "string") {
         let gits = storage.getItemSync("allRepos", {});
-        if (Object.keys(gits).indexOf(program.select) === -1){
+        if (Object.keys(gits).indexOf(program.select) === -1) {
             console.log("Repo does not exist");
             return
         }
@@ -143,17 +143,17 @@ storage.init({dir: homePath}).then(()=>{
             ])
             .raw([
                 "branch"
-            ], (err, branches)=>{
-                if (!err){
+            ], (err, branches) => {
+                if (!err) {
                     branchList = branches.trim().split('\n');
-                    for (branch in branchList){
+                    for (branch in branchList) {
                         branchList[branch] = branchList[branch].trim().split(' ');
-                        branchList[branch] = branchList[branch][branchList[branch].length-1];
+                        branchList[branch] = branchList[branch][branchList[branch].length - 1];
                     }
-                    if (branchList.indexOf(program.branch) === -1){
+                    if (branchList.indexOf(program.branch) === -1) {
                         console.log("Branch not found");
                     } else {
-                        if (gits[program.select][1].indexOf(program.select) === -1){
+                        if (gits[program.select][1].indexOf(program.select) === -1) {
                             gits[program.select][1].push(program.branch);
                             storage.setItemSync("allRepos", gits);
                             console.log("Added " + program.branch + " to " + program.select);
@@ -166,14 +166,14 @@ storage.init({dir: homePath}).then(()=>{
                 }
             });
     }
-    if (typeof program.select === "string" && typeof program.removeBranch === "string"){
+    if (typeof program.select === "string" && typeof program.removeBranch === "string") {
         let gits = storage.getItemSync("allRepos", {});
-        if (Object.keys(gits).indexOf(program.select) === -1){
+        if (Object.keys(gits).indexOf(program.select) === -1) {
             console.log("Repo does not exist");
             return
         }
         let index = gits[program.select][1].indexOf(program.removeBranch);
-        if (index === -1){
+        if (index === -1) {
             console.log("Branch not managed");
         } else {
             gits[program.select][1].splice(index, 1);
@@ -181,7 +181,7 @@ storage.init({dir: homePath}).then(()=>{
             console.log("Removed " + program.removeBranch + " from " + program.select);
         }
     }
-}, (err)=>{
+}, (err) => {
     console.log(err);
 });
 

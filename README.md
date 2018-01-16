@@ -17,7 +17,7 @@ remotes
 |`-s`|Syncs all repos in watched list to their remotes|
 |`--sync-one [repo]`|Syncs specified repo with its remote|
 |`--select [repo]`|Selects repo for further modification, used with `--branch` and `--remove-branch`|
-|`-b [repo]`|Adds specified branch to repo managed list, must be used with `--select`
+|`--branch [branch]`|Adds specified branch to repo managed list, must be used with `--select`
 |`--remove-branch [branch]`|Removes specified branch from repo managed list, must be used with `--select`|
 ### Sync
 
