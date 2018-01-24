@@ -1,5 +1,6 @@
 # git-manage
 [![Build Status](https://travis-ci.org/eliliam/git-manage.svg?branch=master)](https://travis-ci.org/eliliam/git-manage)
+[![npm version](https://badge.fury.io/js/git-manage.svg)](https://badge.fury.io/js/git-manage)
 A cli tool to manage syncing of all local git repositories to their
 remotes
 
@@ -9,16 +10,17 @@ remotes
 # Usage
 |Command     |Definition   |
 |------------|-----------|
-|`-h`|Displays help page|
-|`-a [repo]`|Adds specified repo to managed list|
-|`-r [repo]`|Removes specified repo from managed list|
-|`--remove-all`|Removes all repos from manages list|
-|`-l`|Lists all repos in watched list and their path|
-|`-s`|Syncs all repos in watched list to their remotes|
-|`--sync-one [repo]`|Syncs specified repo with its remote|
-|`--select [repo]`|Selects repo for further modification, used with `--branch` and `--remove-branch`|
-|`--branch [branch]`|Adds specified branch to repo managed list, must be used with `--select`
-|`--remove-branch [branch]`|Removes specified branch from repo managed list, must be used with `--select`|
+|`-V, --version`|output the version number|
+|`-a, --add [repo]`|Add a git repo to manage list|
+|`-l, --list`|List all tracked git repos|
+|`-r, --remove [repo]`|Remove an entry from managed list|
+|`--remove-all`|Remove all repos from managed list|
+|`-s, --sync`|Syncs all added repos to remote|
+|`--sync-one [repo]`|Syncs specific repo to remote|
+|`--select [repo]`|Used to specify branch for further action|
+|`-b, --branch [branch]`|Add branch to add to managed list, requires --select|
+|`--remove-branch [branch]`|Removes branch from managed list, requires --select|
+|`-h, --help`|output usage information|
 ### Sync
 
 > By default, only the master branch is synced, you can add more with `--branch`

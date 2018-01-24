@@ -9,8 +9,10 @@ const colors = require('colors');
 const sync = require('./sync');
 const validate = require('./validate');
 
+let packageJson = require("../package.json");
+
 program
-    .version("0.0.1")
+    .version(packageJson.version)
     .usage("[options]")
     .option("-a, --add [repo]", "Add a git repo to manage list")
     .option("-l, --list", "List all tracked git repos")
@@ -57,10 +59,11 @@ storage.init({dir: homePath}).then(() => {
         let gits = storage.getItemSync("allRepos") || [];
         if (!Object.keys(gits).length) {
             console.log("There are no gits added");
-            console.log("You can add one with git-manage --add git-repo-name");
-            return
+            console.log("You can add one with git-manage -a git-repo-name");
+            return;
         }
         console.log("Added gits:");
+        let gitsToPrint = [];
         for (key in gits) {
             let repoName = key;
             let repoPath = gits[key][0];
@@ -71,13 +74,16 @@ storage.init({dir: homePath}).then(() => {
                 for (let i = 0; i < spaceCounter; i++) {
                     spaces += " ";
                 }
-                console.log(key + spaces + repoPath);
+                gitsToPrint.push(key + spaces + repoPath);
             } else {
                 console.log("Removing " + repoName + " at " + repoPath + " because not valid repo");
                 delete gits[repoName]
             }
             storage.setItemSync("allRepos", gits);
         }
+        gitsToPrint.sort();
+        gitsToPrint.forEach(index => console.log(index));
+
     }
 
     if (program.remove) {

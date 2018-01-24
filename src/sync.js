@@ -11,6 +11,15 @@ module.exports = (repoPath, branch) => {
                 toLog += res.trim().split("/").slice(-1)[0]+" / "+branch+": ";
             }
         })
+        .raw([
+            "ls-remote",
+            "-q"
+        ], (err)=>{
+            if(err){
+                toLog += "Remote is invalid".red;
+                console.log(toLog);
+            }
+        })
         .raw(["fetch"])
         .raw([
             "rev-parse",
